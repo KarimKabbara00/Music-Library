@@ -13,7 +13,7 @@ root.winfo_toplevel().title("Music Library")
 header = tk.Frame(root)
 header.grid(row=0, column=0)
 
-body = tk.Frame(root, highlightbackground="black", highlightthickness=1)
+body = tk.Frame(root)
 body.grid(row=1, column=0, pady=40)
 
 menu_label = tk.Label(header, text="Your Collection", font=("Arial", 25))
