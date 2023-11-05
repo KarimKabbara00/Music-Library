@@ -1,5 +1,6 @@
 import tkinter as tk
 import Library as lib
+from ScrolledFrame import ScrolledFrame
 
 # window configuration
 root = tk.Tk()
@@ -11,12 +12,12 @@ root.state("zoomed")
 root.winfo_toplevel().title("Music Library")
 
 header = tk.Frame(root)
-header.grid(row=0, column=0)
+header.pack(pady=(0, 30))
 
-body = tk.Frame(root)
-body.grid(row=1, column=0, pady=40)
+body = ScrolledFrame(root)
+body.pack(fill=tk.BOTH, padx=(0, 0))
 
-menu_label = tk.Label(header, text="Your Collection", font=("Arial", 25))
+menu_label = tk.Label(header, text="My Collection", font=("Arial", 25))
 menu_label.pack(anchor=tk.CENTER, pady=(50, 0), ipadx=100)
 
 lib.init(body)

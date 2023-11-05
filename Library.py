@@ -1,15 +1,14 @@
 import json
-import tkinter
+import tkinter as tk
 from tkinter import Label, Frame
 from PIL import Image, ImageTk
+import helper_functions as hf
 
-artist_x_pad = 100
-artists_per_row = 3
+artist_x_pad = 20
 
 
 def place_component(body, frame, image, label):
-
-    frame.configure(highlightthickness=1, highlightbackground="black", padx=5, pady=5)
+    frame.configure(padx=5, pady=5)
 
     artist_image = Label(frame, image=image)
     artist_image.image = image
@@ -41,52 +40,46 @@ def on_leave(event, body, frame, label):
 
 
 def init(body):
-    with open('data.json', 'r') as f:
-        data = json.load(f)
+    # Load JSON
+    with open('data.json', 'r') as file:
+        data = json.load(file)
 
     artists = []
     for entry in data:
         artists.append(entry['Artist Name'])
 
-    artists = sorted(list(set(artists)))
+    # Sort alphabetically
+    artists = hf.compile_artists(artists)
 
-    row = col = 0
-    for a in artists:
+    # Display artists
+    for letter in artists:
 
-        # Load image
-        i_name = 'logos/' + a + '.png'
-        i = Image.open(i_name)
-        i = i.resize((300, 250))
-        i = ImageTk.PhotoImage(i)
+        col = 0
 
-        if col == 0:
+        # Title Letter
+        letter_frame = Frame(body.inner)
+        letter_frame.pack(anchor=tk.W, fill=tk.X, padx=(50, 0), pady=(15, 5))
+        letter_label = Label(letter_frame, text=letter.upper(), font=("Arial", 18))
+        letter_label.pack(anchor=tk.NW)
+
+        separator = Frame(body.inner, height=2, width=1800, highlightthickness=2, highlightbackground="black")
+        separator.pack(anchor=tk.W, fill=tk.X, padx=(50, 0), pady=(0, 10))
+
+        parent_frame = Frame(body.inner)
+        parent_frame.pack(anchor=tk.W, padx=(50, 0))
+        for a in artists[letter]:
+
+            # Load image
+            i_name = 'logos/' + a + '.png'
+            i = Image.open(i_name)
+            i = i.resize((300, 250))
+            i = ImageTk.PhotoImage(i)
+
             # Create Frame
-            f = Frame(body)
-            f.grid(row=row, column=col, padx=(0, artist_x_pad), pady=(20, 20))
+            f = Frame(parent_frame)
+            f.grid(row=0, column=col, padx=(0, artist_x_pad))
 
             # Place image
-            place_component(body, f, i, a)
-
-            col += 1
-
-        elif col == artists_per_row:
-
-            # Create Frame
-            f = Frame(body)
-            f.grid(row=row, column=col, padx=(artist_x_pad, 0), pady=(20, 20))
-
-            # Place image
-            place_component(body, f, i, a)
-
-            row += 1
-            col = 0
-
-        else:
-            # Create Frame
-            f = Frame(body)
-            f.grid(row=row, column=col, padx=(artist_x_pad, artist_x_pad), pady=(20, 20))
-
-            # Place image
-            place_component(body, f, i, a)
+            place_component(body.inner, f, i, a)
 
             col += 1
