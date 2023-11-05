@@ -17,10 +17,10 @@ class ScrolledFrame(tk.Frame):
         self._canvas.configure(yscrollcommand=self._vertical_bar.set)
 
         # create bottom scrollbar and connect to canvas X
-        self._horizontal_bar = tk.Scrollbar(self, orient='horizontal', command=self._canvas.xview)
-        if horizontal:
-            self._horizontal_bar.grid(row=1, column=0, sticky='we')
-        self._canvas.configure(xscrollcommand=self._horizontal_bar.set)
+        # self._horizontal_bar = tk.Scrollbar(self, orient='horizontal', command=self._canvas.xview)
+        # if horizontal:
+        #     self._horizontal_bar.grid(row=1, column=0, sticky='we')
+        # self._canvas.configure(xscrollcommand=self._horizontal_bar.set)
 
         # Bind scroll wheel
         self._canvas.bind_all("<MouseWheel>", self._on_mousewheel)
@@ -53,3 +53,12 @@ class ScrolledFrame(tk.Frame):
 
     def _on_mousewheel(self, event):
         self._canvas.yview_scroll(int(-1 * (event.delta / 120)), "units")
+
+    def get_canvas(self):
+        return self._canvas
+
+    def get_scrollbar(self):
+        return self._vertical_bar
+
+    def get_inner(self):
+        return self.inner
